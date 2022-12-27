@@ -3,31 +3,30 @@
 
 import { crayon } from "https://deno.land/x/crayon@3.3.2/mod.ts";
 
-import { handleKeyboardControls, handleKeypresses } from "../src/keyboard.ts";
-import { handleMouseControls } from "../src/mouse.ts";
+import { handleControls, Style } from "../mod.ts";
 import { Tui } from "../src/tui.ts";
 import { Canvas } from "../src/canvas.ts";
 
-import { BoxComponent } from "../src/components/box.ts";
-import { ButtonComponent } from "../src/components/button.ts";
-import { CheckboxComponent } from "../src/components/checkbox.ts";
-import { ComboboxComponent } from "../src/components/combobox.ts";
-import { FrameComponent } from "../src/components/frame.ts";
-import { ProgressBarComponent } from "../src/components/progress_bar.ts";
-import { SliderComponent } from "../src/components/slider.ts";
-import { TextboxComponent } from "../src/components/textbox.ts";
+import { Box } from "../src/components/box.ts";
+import { Button } from "../src/components/button.ts";
+import { Checkbox } from "../src/components/checkbox.ts";
+import { Combobox } from "../src/components/combobox.ts";
+import { Frame } from "../src/components/frame.ts";
+import { ProgressBar } from "../src/components/progress_bar.ts";
+import { Slider } from "../src/components/slider.ts";
+import { Textbox } from "../src/components/textbox.ts";
 import { Theme } from "../src/theme.ts";
-import { LabelComponent } from "../src/components/label.ts";
-import { ScrollableViewComponent } from "../src/components/scrollable_view.ts";
-import { TableComponent } from "../src/components/table.ts";
+import { Label } from "../src/components/label.ts";
+import { Table } from "../src/components/table.ts";
 
 const baseTheme: Theme = {
   base: crayon.bgLightBlue,
   focused: crayon.bgCyan,
   active: crayon.bgBlue,
+  disabled: crayon.bgBlack,
 };
 
-const tuiStyle = crayon.bgBlack.white;
+const tuiStyle: Style = crayon.bgBlack.white;
 const tui = new Tui({
   style: tuiStyle,
   canvas: new Canvas({
@@ -38,11 +37,9 @@ const tui = new Tui({
 
 tui.dispatch();
 
-handleKeypresses(tui);
-handleMouseControls(tui);
-handleKeyboardControls(tui);
+handleControls(tui);
 
-new BoxComponent({
+new Box({
   tui,
   theme: baseTheme,
   rectangle: {
@@ -53,7 +50,7 @@ new BoxComponent({
   },
 });
 
-new ButtonComponent({
+new Button({
   tui,
   theme: baseTheme,
   rectangle: {
@@ -64,7 +61,7 @@ new ButtonComponent({
   },
 });
 
-new CheckboxComponent({
+new Checkbox({
   tui,
   theme: baseTheme,
   rectangle: {
@@ -75,7 +72,7 @@ new CheckboxComponent({
   },
 });
 
-new ComboboxComponent({
+new Combobox({
   tui,
   theme: baseTheme,
   rectangle: {
@@ -88,7 +85,7 @@ new ComboboxComponent({
   zIndex: 2,
 });
 
-new ComboboxComponent({
+new Combobox({
   tui,
   theme: baseTheme,
   rectangle: {
@@ -102,7 +99,7 @@ new ComboboxComponent({
   zIndex: 1,
 });
 
-const progressBar1 = new ProgressBarComponent({
+const progressBar1 = new ProgressBar({
   tui,
   theme: {
     ...baseTheme,
@@ -125,7 +122,7 @@ const progressBar1 = new ProgressBarComponent({
   },
 });
 
-new LabelComponent({
+new Label({
   tui,
   align: {
     horizontal: "center",
@@ -142,7 +139,7 @@ new LabelComponent({
   value: "Centered text\nThat automatically adjusts its rectangle size\n!@#!\nSo cool\nWOW",
 });
 
-const progressBar2 = new ProgressBarComponent({
+const progressBar2 = new ProgressBar({
   tui,
   theme: {
     ...baseTheme,
@@ -165,7 +162,7 @@ const progressBar2 = new ProgressBarComponent({
   },
 });
 
-new SliderComponent({
+new Slider({
   tui,
   theme: {
     ...baseTheme,
@@ -186,7 +183,7 @@ new SliderComponent({
   },
 });
 
-new SliderComponent({
+new Slider({
   tui,
   theme: {
     ...baseTheme,
@@ -207,7 +204,7 @@ new SliderComponent({
   },
 });
 
-new TextboxComponent({
+new Textbox({
   tui,
   theme: baseTheme,
   multiline: false,
@@ -220,7 +217,7 @@ new TextboxComponent({
   value: "hi",
 });
 
-new TextboxComponent({
+new Textbox({
   tui,
   theme: {
     ...baseTheme,
@@ -236,7 +233,7 @@ new TextboxComponent({
   placeholder: "example",
 });
 
-new TextboxComponent({
+new Textbox({
   tui,
   theme: baseTheme,
   multiline: false,
@@ -250,7 +247,7 @@ new TextboxComponent({
   value: "hi!",
 });
 
-new TextboxComponent({
+new Textbox({
   tui,
   theme: {
     ...baseTheme,
@@ -274,7 +271,7 @@ new TextboxComponent({
   value: "hello!\nwhats up?",
 });
 
-new TableComponent({
+new Table({
   tui,
   theme: {
     base: crayon.bgBlack.white,
@@ -304,92 +301,17 @@ new TableComponent({
   framePieces: "rounded",
 });
 
-const scrollView = new ScrollableViewComponent({
-  tui,
-  theme: {
-    base: crayon.bgLightBlack.lightWhite,
-    scrollbar: {
-      vertical: {
-        thumb: baseTheme.active,
-        track: baseTheme.base,
-      },
-      horizontal: {
-        thumb: baseTheme.active,
-        track: baseTheme.base,
-      },
-      corner: baseTheme.base,
-    },
-  },
-  rectangle: {
-    column: 100,
-    row: 11,
-    width: 20,
-    height: 8,
-  },
-});
-
-new LabelComponent({
-  tui,
-  view: scrollView,
-  theme: { base: scrollView.style },
-  align: {
-    horizontal: "center",
-    vertical: "top",
-  },
-  rectangle: {
-    column: 4,
-    row: 2,
-    height: -1,
-    width: -1,
-  },
-  value: "Scroll down",
-});
-
-new LabelComponent({
-  tui,
-  view: scrollView,
-  theme: { base: scrollView.style },
-  align: {
-    horizontal: "center",
-    vertical: "top",
-  },
-  rectangle: {
-    column: 4,
-    row: 12,
-    height: -1,
-    width: -1,
-  },
-  value: "Scroll right",
-});
-
-new ButtonComponent({
-  tui,
-  view: scrollView,
-  theme: baseTheme,
-  rectangle: {
-    column: 30,
-    row: 12,
-    height: 1,
-    width: 7,
-  },
-  label: "Hello!!",
-});
-
 // Generate frames and labels for every component
 queueMicrotask(() => {
   for (const component of tui.components) {
     const { rectangle, view } = component;
     if (!rectangle) continue;
 
-    const name = component.constructor.name.replace("Component", "");
-    const theme = {
-      base: component.view?.style ?? tuiStyle,
-    };
+    const name = component.constructor.name;
 
-    new LabelComponent({
+    new Label({
       tui,
       view,
-      theme,
       align: {
         horizontal: "left",
         vertical: "top",
@@ -403,14 +325,14 @@ queueMicrotask(() => {
       value: name,
     });
 
-    new FrameComponent({
+    new Frame({
       tui,
       view,
       component,
       framePieces: "rounded",
       theme: {
         base: tuiStyle,
-        focused: tuiStyle.bold,
+        focused: (tuiStyle as unknown as { bold: Style }).bold,
       },
     });
   }

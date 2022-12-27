@@ -4,7 +4,7 @@
 import { crayon } from "https://deno.land/x/crayon@3.3.2/mod.ts";
 
 import { Tui } from "../mod.ts";
-import { BoxComponent } from "../src/components/box.ts";
+import { Box } from "../src/components/box.ts";
 
 const tui = new Tui({
   style: crayon.bgBlack.white,
@@ -13,7 +13,7 @@ const tui = new Tui({
 tui.dispatch();
 
 let hue = 0;
-const box = new BoxComponent({
+const box = new Box({
   tui,
   theme: {
     base: (text: string) => crayon.bgHsl(++hue % 360, 50, 50)(text),

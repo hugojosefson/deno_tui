@@ -3,19 +3,17 @@
 
 import { crayon } from "https://deno.land/x/crayon@3.3.2/mod.ts";
 
-import { handleKeypresses, handleMouseControls, PlaceComponentOptions, Tui } from "../mod.ts";
-import { BoxComponent } from "../src/components/box.ts";
+import { handleControls, PlaceComponentOptions, Tui } from "../mod.ts";
+import { Box } from "../src/components/box.ts";
 
 const tui = new Tui({
   style: crayon.bgBlack.white,
 });
 
 tui.dispatch();
+handleControls(tui);
 
-handleKeypresses(tui);
-handleMouseControls(tui);
-
-class DraggableBoxComponent extends BoxComponent {
+class DraggableBoxComponent extends Box {
   constructor(options: PlaceComponentOptions) {
     super(options);
 
