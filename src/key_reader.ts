@@ -10,9 +10,7 @@ const textDecoder = new TextDecoder();
  * It yields array of either KeyPress or MousePress
  */
 export async function* readKeypresses(stdin: Stdin): AsyncGenerator<(KeyPress | MousePress)[], void, void> {
-  try {
-    stdin.setRaw(true, { cbreak: Deno.build.os !== "windows" });
-  } catch { /**/ }
+  stdin.setRaw(true, { cbreak: Deno.build.os !== "windows" });
 
   for await (const buffer of stdin.readable) {
     yield [...decodeBuffer(buffer)];
